@@ -6,6 +6,20 @@ Play a song on Spotify and this thing turns your screen into a high-energy, resp
 
 It's a lightweight Tauri desktop app. You log in once with your Spotify account, hit play on any device (or inside the app), and the kinetic typography engine does the rest.
 
+## Running it
+
+You need a free Spotify app Client ID first — see **[SETUP.md](SETUP.md)**. Then:
+
+```bash
+pnpm install
+pnpm tauri dev    # desktop app
+# or: pnpm dev    # frontend-only preview in a browser
+```
+
+Type-check without building: `pnpm typecheck`.
+Production build: `pnpm build`.
+
+
 ## How it fits together
 
 ```
