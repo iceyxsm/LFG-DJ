@@ -162,16 +162,9 @@ export const KineticScene: React.FC<KineticSceneProps> = ({
 
   const handleCycleArchetype = useCallback(() => {
     setForced((curr) => {
-      if (!curr) {
-        setForcedArchetype("FF_TRACKING_LOCK");
-        return "FF_TRACKING_LOCK";
-      }
-      const idx = ALL_STYLES.indexOf(curr);
-      if (idx === ALL_STYLES.length - 1) {
-        setForcedArchetype(null);
-        return null;
-      }
-      const next = ALL_STYLES[idx + 1];
+      const startIdx = curr ? ALL_STYLES.indexOf(curr) : -1;
+      const nextIdx = (startIdx + 1) % (ALL_STYLES.length + 1);
+      const next = nextIdx === ALL_STYLES.length ? null : ALL_STYLES[nextIdx];
       setForcedArchetype(next);
       return next;
     });
@@ -481,6 +474,7 @@ export const KineticScene: React.FC<KineticSceneProps> = ({
                     color: isCurr ? "#000000" : isDone ? primaryHex : "rgba(255,255,255,0.24)",
                     borderBottom: isCurr ? "none" : isDone ? "2px solid rgba(255,255,255,0.4)" : "2px solid transparent",
                     boxShadow: isCurr ? `0 4px 14px ${accentHex}66` : "none",
+                    textShadow: "none",
                     transform: isCurr
                       ? `scale(${1.08 + continuousBeatPulse * 0.05}) translateY(${-continuousBeatPulse * 3}px)`
                       : "scale(1)",
@@ -547,7 +541,7 @@ export const KineticScene: React.FC<KineticSceneProps> = ({
                     : `scale(${1 + continuousBeatPulse * 0.015})`,
                   opacity: isCurrent ? 1 : wordDist === 1 ? 0.78 : 0.35,
                   boxShadow: isCurrent ? "0 8px 24px rgba(0,0,0,0.6)" : "none",
-                  textShadow: isCurrent ? chromaticShadow : isSung ? "3px 3px 0px #000000" : "none",
+                  textShadow: isCurrent ? "none" : isSung ? "3px 3px 0px #000000" : "none",
                   transition: "background-color 0.12s ease, color 0.12s ease, transform 0.12s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.15s ease",
                   wordBreak: "break-word",
                   willChange: "transform, opacity",
@@ -611,7 +605,8 @@ export const KineticScene: React.FC<KineticSceneProps> = ({
                     ? `scale(${1.12 + continuousBeatPulse * 0.06}) translateY(${-2 - continuousBeatPulse * 4}px)`
                     : `scale(${1 + continuousBeatPulse * 0.015})`,
                   opacity: isCurrent ? 1 : wordDist === 1 ? 0.78 : 0.35,
-                  boxShadow: isCurrent ? `0 6px 20px ${accentHex}55, 3px 3px 0px #000000` : "none",
+                  boxShadow: isCurrent ? `0 8px 24px rgba(0,0,0,0.6), 0 0 20px ${accentHex}44` : "none",
+                  textShadow: isCurrent ? "none" : isSung ? "3px 3px 0px #000000" : "none",
                   transition: "all 0.1s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.15s ease",
                   wordBreak: "break-word",
                   willChange: "transform, opacity",
@@ -1227,6 +1222,7 @@ export const KineticScene: React.FC<KineticSceneProps> = ({
                         borderRadius: "2px",
                         backgroundColor: isLocked ? "#ff2a5f" : trackerColor,
                         color: "#000000",
+                        textShadow: "none",
                         fontSize: "8px",
                         fontWeight: 900,
                         letterSpacing: "0.08em",
