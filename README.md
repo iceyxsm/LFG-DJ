@@ -1,5 +1,7 @@
 # LFG-DJ
 
+![LFG-DJ Optical Kinetic Typography](assets/preview.png)
+
 Play a song on Spotify and this thing turns your screen into a high-energy, responsive **kinetic typography visualizer**. Rhythmic, dynamic typography animations slam, cut, flow, and breathe in sync with your playback, lyrics, and room audio.
 
 It's a lightweight Tauri desktop app. You log in once with your Spotify account, hit play on any device (or inside the app), and the kinetic typography engine does the rest.
@@ -25,19 +27,21 @@ Spotify (your account)
 
 One lightweight loop drives it: every animation frame the app interpolates the playback position, picks the active lyric line, samples the mic, and publishes state.
 
-- **`kinetic/KineticLayer.tsx`** — Renders the dynamic kinetic typography scenes (Impact Slam, Word-by-Word Staccato, Editorial Poster, Kinetic Marquee, Split Perspective) over an ambient beat-reactive backdrop.
+- **`kinetic/KineticLayer.tsx`** — Renders dynamic kinetic typography scenes over an ambient beat-reactive backdrop.
 - **Pure GPU-composited CSS3 Transforms & Layouts** — runs at locked 60/120 FPS with minimal CPU/GPU overhead (no heavy 3D shaders or bloated runtime dependencies).
 
 ## What it does
 
 - **Two ways to hear Spotify.** *Watcher* mode polls your account and works with playback on any device (no Premium needed). *SDK* mode turns the app into a real Spotify Connect device for tight sync (Premium required).
 - **Synced lyrics** from [LRClib](https://lrclib.net), converted into real **kinetic text animations** dynamically selected per line:
-  - **Impact Hero**: Giant stacked typography slamming into focus with overshoot spring physics.
-  - **Kinetic Staccato**: Rapid center-stage cuts flashing word-by-word with chromatic aberration kicks.
-  - **Editorial Poster**: Modernist Swiss typographic poster grid with staggered phrase reveals.
-  - **Kinetic Marquee**: High-velocity twin scrolling ribbons synced to the track cadence.
-  - **Split Perspective**: 3D perspective fold slamming flat on the beat.
-- **Audio & Beat Reactive**: Mic and audio bass/treble directly pump the typography scale, letter-spacing, and chromatic glow.
+  - **Staccato Burst**: Syllable cuts flashing with explosive kinetic impacts and context line.
+  - **Whip Directional Slam**: High-velocity directional whip-pan entrance with kinetic skew.
+  - **Inverted Color Strobe**: High-contrast block snap with active word inversion.
+  - **Word Cascade Stack**: Words slamming down sequentially into a vertical rhythm stack.
+  - **Perspective 3D Snap**: Athletic 3D camera tilt and solid extrusion depth.
+  - **Dynamic Scale Ramp**: Speed-ramp zoom tracking sung syllables in real time.
+  - **Optical Glyph Tracker (ff-tracking)**: Monospace optical glyph bounding boxes with diagonal scanline hatching, telemetry reticles, and vector connector tracer lines.
+- **Continuous Beat Reactive Groove**: Continuous musical oscillation and mic FFT modulation that keeps text grooving with the rhythm rather than hitting and stopping.
 - **Deterministic Moods**: Color palettes derived deterministically per track from its title and artist.
 - **Stays logged in**: refresh token persisted; access tokens renew themselves.
 
@@ -55,26 +59,27 @@ One lightweight loop drives it: every animation frame the app interpolates the p
 
 ```
 index.html              #root (React) + #overlay; CSP for spotify/lrclib
+assets/
+  preview.png           preview screenshot
 src/
   main.tsx              bootstrap + the rAF loop + React root mount
   App.tsx               renders <KineticLayer/>
   state.ts              app state + publishes window.__dj/__djState each frame
   auth.ts               Spotify OAuth PKCE (paste your Client ID here)
   player.ts             watcher polling + Web Playback SDK + transport
-  lyrics.ts             LRClib fetch, LRC parse, active-line picking
+  lyrics.ts             LRClib fetch, multi-timestamp LRC parse, active-line picking
   mic.ts                getUserMedia + AnalyserNode → energy/bands
   ui/overlay.ts         top-bar chips, login pane, toasts
   styles/               base + overlay + lyric-layer CSS
   kinetic/
     types.ts            type definitions for signals and archetypes
-    archetypes.ts       dynamic kinetic archetype selector
-    timing.ts           pure math easing & word-level timing helpers
+    archetypes.ts       dynamic kinetic archetype selector (7 styles)
+    timing.ts           pure math easing, continuous beat clock & word-level timing helpers
     mood.ts             deterministic per-track color palette generator
     signalStore.ts      reactive store over __djState
     AmbientBackground.tsx  lightweight beat-reactive ambient glow
-    KineticScene.tsx    kinetic typography renderer (5 archetypes)
+    KineticScene.tsx    kinetic typography renderer (7 archetypes + camera rig)
     KineticLayer.tsx    fullscreen layer mounting scene + background
-  lyric-test.tsx        standalone kinetic typography harness (lyric-test.html)
 src-tauri/
   tauri.conf.json       window config, app id com.lfgdj.app
   src/lib.rs            refresh-token save/load/clear commands
